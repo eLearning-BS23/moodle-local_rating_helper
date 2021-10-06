@@ -54,7 +54,7 @@ class rating_helper_services extends external_api {
         );
 
         if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-            $output['result'] = 'Course module not found for id '.$params['cmid'];
+            $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
             $output['success'] = false;
             return $output;
         }
@@ -84,7 +84,7 @@ class rating_helper_services extends external_api {
             array_push($newArr,$outpuArr);
         }
 
-        $output['result'] = 'Data found';
+        $output['result'] = get_string('notfound','local_rating_helper',[$params['cmid']]);;
         $output['success'] = true;
         $output['ratings'] = $newArr;
         return $output;
@@ -122,7 +122,7 @@ class rating_helper_services extends external_api {
         );
 
         if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-            $output['result'] = 'Course module not found for id '.$params['cmid'];
+            $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
             $output['success'] = false;
             return $output;
         }
@@ -142,7 +142,7 @@ class rating_helper_services extends external_api {
         $output['rated3'] = $ratingList->rating3 ?? 0;
         $output['rated4'] = $ratingList->rating4 ?? 0;
         $output['rated5'] = $ratingList->rating5 ?? 0;
-        $output['result'] = 'Data found';
+        $output['result'] = get_string('notfound','local_rating_helper',[$params['cmid']]);
         $output['success'] = true;
         return $output;
 
@@ -202,12 +202,12 @@ class rating_helper_services extends external_api {
         // Data validation.
         try {
             if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-                $output['result'] = 'Course module not found for id '.$params['cmid'];
+                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
                 $output['success'] = false;
                 return $output;
             }
             if (! ($user = $DB->get_record('user', array('id' => $params['userid'])))) {
-                $output['result'] = 'User not found for id '.$params['userid'];
+                $output['result'] = get_string('usernotfound','local_rating_helper',[$params['userid']]);
                 $output['success'] = false;
                 return $output;
             }
@@ -297,12 +297,12 @@ class rating_helper_services extends external_api {
         // Data validation.
         try {
             if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-                $output['result'] = 'Course module not found for id '.$params['cmid'];
+                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
                 $output['success'] = false;
                 return $output;
             }
             if (! ($user = $DB->get_record('user', array('id' => $params['userid'])))) {
-                $output['result'] = 'User not found for id '.$params['userid'];
+                $output['result'] = get_string('usernotfound','local_rating_helper',[$params['userid']]);
                 $output['success'] = false;
                 return $output;
             }
@@ -322,7 +322,7 @@ class rating_helper_services extends external_api {
         }
 
         if ($output['success']) {
-            $output['result'] = 'Rating saved.';
+            $output['result'] = get_string('ratingsaved','local_rating_helper');
         } else {
             $output['result'] = 'user has already rated.';
         }
@@ -379,7 +379,7 @@ class rating_helper_services extends external_api {
         // Data validation.
         try {
             if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-                $output['result'] = 'Course module not found for id '.$params['cmid'];
+                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
                 $output['success'] = false;
                 return $output;
             }
@@ -448,7 +448,7 @@ class rating_helper_services extends external_api {
         // Data validation.
         try {
             if (! ($course = $DB->get_record('course', array('id' => $params['courseid'])))) {
-                $output['result'] = 'Course not found for id '.$params['courseid'];
+                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['courseid']]);
                 $output['success'] = false;
                 return $output;
             }
