@@ -6,7 +6,7 @@ The plugin contains a link to a separate form page to give a rating and displays
 ![img.png](assets/rating-form-page.png)
 
 ## Rating Display
-![img.png](assets/rating-display.png)
+![img.png](assets/review-display.png)
 
 Each user can rate a course only once. If they visit the ratings form again, a message is displayed all courses and hide form displays the rating they gave.
 
