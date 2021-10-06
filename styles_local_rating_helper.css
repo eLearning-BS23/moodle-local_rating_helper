@@ -301,9 +301,10 @@ label.star {
 }
 
 input.star:checked ~ label.star:before {
-    content: '\f005';
+    content: '✰';
     color: #FD4;
-    transition: all .25s
+    transition: all .25s;
+    font-size: 40px;
 }
 
 input.star-5:checked ~ label.star:before {
@@ -320,6 +321,9 @@ input.star-1:checked ~ label.star:before {
 /*}*/
 
 label.star:before {
-    content: '\f006';
-    font-family: FontAwesome
+    content: '✰';
+    font-size: 40px;
+}
+.star-head svg {
+    margin-right: 10px;
 }

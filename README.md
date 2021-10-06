@@ -44,7 +44,7 @@ edit Course summary add a button or link -
 
 put link like this -
 ```
-  $CFG->wwwroot . '/local/rating_helper/index.php?course_id={your_course_id}'
+  {project url}/local/rating_helper/index.php?course_id={your_course_id}
 ```
 ## Access Page
 <p align="left">

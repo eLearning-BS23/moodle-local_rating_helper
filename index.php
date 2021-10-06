@@ -31,7 +31,7 @@ $PAGE->requires->js_call_amd('local_rating_helper/submitrating', 'init', $params
 
     <style>
         <?php
-            include 'rating_style.css';
+            include 'styles_local_rating_helper.css';
         ?>
     </style>
 
@@ -195,11 +195,6 @@ echo html_writer::tag('div', $msg, ['class' => 'ratings-title mb-4']);
             </div>
         </div>
 
-        <!--            //            echo  html_writer::tag('h4', get_string('previousratings', 'local_rating_helper'),['class'=>'pre-rate']);-->
-        <!--            echo html_writer::tag('div', '',['id'=>'col-md-3 col-12']);-->
-        <!--            echo html_writer::tag('div', '',['id'=>'card custom-rounded w-100','style'=>"width: 18rem;"]);-->
-        <!--            echo html_writer::tag('div', '',['id'=>'card custom-rounded w-100','style'=>"overflow: hidden; max-height: 200px"]);-->
-        <!--            echo '<img class="custom-rounded-top" src="--><?//= $imageurl ?><!--" alt="Card image cap">';-->
         <div class="col-md-3 col-12">
             <div class="card custom-rounded w-100" style="width: 18rem;">
                 <div class="custom-rounded-top" style="overflow: hidden; max-height: 200px">
