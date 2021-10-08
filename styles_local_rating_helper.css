@@ -18,6 +18,7 @@
     font-size: 45px;
     padding-right: 10px;
 }
+
 #avg_ret_star.star-head {
     display: flex-wrap;
 }
@@ -268,8 +269,11 @@
 
 .star-head {
     padding-right: 30px;
-    display: flex;
     justify-content: space-between;
+}
+
+.star-of-star .star-head {
+    display: flex;
 }
 
 .icon {
@@ -326,6 +330,7 @@ label.star:before {
     content: '✰';
     font-size: 40px;
 }
+
 .star-head svg {
     margin-right: 10px;
 }
