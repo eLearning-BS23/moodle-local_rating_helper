@@ -41,6 +41,11 @@ $string['coursenotfound'] = 'Course module not found for id "{$a}"?';
 $string['usernotfound'] = 'User not found for id  "{$a}"?';
 $string['notfound'] = 'Data Not Found';
 $string['ratingsaved'] = 'Rating Submited';
+$string['submit'] = 'Show';
+$string['choserating'] = 'Chose Rating';
+$string['choseuser'] = 'Chose User';
+$string['chosecourse'] = 'Course Rating';
+$string['reset'] = 'Reset';
 
 $string['privacy:metadata:database:local_rating_helper'] = 'Stores the ratings the user has made for the course modules.';
 $string['privacy:metadata:database:local_rating_helper:userid'] = 'Id of the user who has rated.';

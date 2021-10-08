@@ -47,7 +47,7 @@ echo html_writer::tag('div', $msg, ['class' => 'ratings-title mb-4']);
 
                 <div class="left-upper-part">
                     <?php
-                    echo html_writer::tag('h1', '0.0', ['id' => "avg_rating", 'class' => 'five']);
+                    echo html_writer::tag('span', '0.0', ['id' => "avg_rating", 'class' => 'five']);
 
                     $msg = html_writer::tag('h3', get_string('ratings', 'local_rating_helper'), ['id' => "avg_ret_star", 'class' => 'star-head']);
                     echo html_writer::tag('div', $msg, ['class' => 'star']);
