@@ -84,7 +84,7 @@ class rating_helper_services extends external_api {
             array_push($newArr,$outpuArr);
         }
 
-        $output['result'] = get_string('notfound','local_rating_helper',[$params['cmid']]);;
+        $output['result'] = get_string('found','local_rating_helper',[$params['cmid']]);;
         $output['success'] = true;
         $output['ratings'] = $newArr;
         return $output;
@@ -485,7 +485,7 @@ class rating_helper_services extends external_api {
                 'success'   => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
                 'result'    => new external_value(PARAM_RAW, 'Return message'),
                 'rating'    => new external_value(PARAM_RAW, 'Course rating'),
-                'reviewcount'    => new external_value(PARAM, 'Course review count'),
+                'reviewcount'    => new external_value(PARAM_RAW, 'Course review count'),
             )
         );
     }

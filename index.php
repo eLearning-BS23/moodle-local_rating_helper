@@ -181,8 +181,9 @@ echo html_writer::tag('div', $msg, ['class' => 'ratings-title mb-4']);
                                     </div>
                                 </div>
                             </form>
+                            <hr>
                         </div>
-                        <hr>
+
                         <?php
                     }
                     echo html_writer::tag('h4', get_string('previousratings', 'local_rating_helper'), ['class' => 'pre-rate']);
@@ -207,7 +208,7 @@ echo html_writer::tag('div', $msg, ['class' => 'ratings-title mb-4']);
                     <h5 class="eye"><a href="<?= $courseurl ?>"><?php echo $course->fullname; ?> </a></h5>
 
                     <div class="suffer-from">
-                        <span class="suffer"><?php echo html_entity_decode($course->summary); ?></span>
+                        <span class="suffer"><?php echo get_snippet(html_entity_decode($course->summary),15); ?></span>
                     </div>
                     <div class="icon-last my-2  flex-wrap">
                         <div id="avg-course-ret"></div>

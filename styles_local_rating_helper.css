@@ -18,6 +18,9 @@
     font-size: 45px;
     padding-right: 10px;
 }
+#avg_ret_star.star-head {
+    display: flex-wrap;
+}
 
 #avg_ret_star {
     font-size: 30px;
@@ -166,7 +169,6 @@
     font-weight: 500;
     font-size: 30px;
     color: #9CA4B6;
-    margin-top: 20px;
 }
 
 .person-rating {
