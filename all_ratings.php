@@ -1,4 +1,18 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once("../../config.php");
 
@@ -27,13 +41,13 @@ if ($date) {
     array_push($arr, ['ratingdate' => $date]);
 }
 $query = '';
-$finalQuery ='';
+$finalQuery = '';
 if (count($arr) > 0) {
     $finalQuery = 'WHERE ';
     foreach ($arr as $key => $data) {
         foreach ($data as $index => $value) {
             if ($index == 'ratingdate') {
-                $query = 'lrh.'.$index . ' >= ' . $value;
+                $query = 'lrh.' . $index . ' >= ' . $value;
             } else {
                 $query = $index . '=' . $value;
             }
@@ -80,59 +94,51 @@ $users = $DB->get_records('user', null);
 
     <form autocomplete="off" method="GET" accept-charset="utf-8" class="mform">
 
-        <div class="d-flex mb-4">
-            <div class="form-inline align-items-start felement" data-fieldtype="select">
-                <select class="custom-select" name="course">
-                    <?php
-                    echo '<option value="">' . get_string('chosecourse', 'local_rating_helper') . '</option>';
-                    foreach ($courses as $course) {
-                        $selected = (isset($courseid) && $courseid == $course->id) ? 'selected' : '';
-                        echo '<option '.$selected.' value="' . $course->id . '">' . $course->fullname . '</option>';
-                    }
+        <div class="d-flex  mb-4">
+            <select class="form-control custom-select" name="course">
+                <?php
+                echo '<option value="">' . get_string('chosecourse', 'local_rating_helper') . '</option>';
+                foreach ($courses as $course) {
+                    $selected = (isset($courseid) && $courseid == $course->id) ? 'selected' : '';
+                    echo '<option ' . $selected . ' value="' . $course->id . '">' . $course->fullname . '</option>';
+                }
+                ?>
+            </select>
+            <select class="form-control custom-select" name="user">
+                <?php
+                echo '<option value="">' . get_string('choseuser', 'local_rating_helper') . '</option>';
+                foreach ($users as $user) {
+                    $selected = (isset($userid) && $userid == $user->id) ? 'selected' : '';
+                    echo '<option value="' . $user->id . '">' . $user->firstname . ' (' . $user->email . ')</option>';
+                }
+                ?>
+            </select>
+            <select class="form-control custom-select" name="rating">
+                <?php
+
+                echo '<option value="">' . get_string('choserating', 'local_rating_helper') . '</option>';
+                for ($i = 1; $i <= 5; $i++) {
+                    $selected = (isset($ratingid) && $ratingid == $i) ? 'selected' : '';
                     ?>
-                </select>
-            </div>
-            <div class="form-inline align-items-start felement" data-fieldtype="select">
-                <select class="custom-select" name="user">
-                    <?php
-                    echo '<option value="">' . get_string('choseuser', 'local_rating_helper') . '</option>';
-                    foreach ($users as $user) {
-                        $selected = (isset($userid) && $userid == $user->id) ? 'selected' : '';
-                        echo '<option value="' . $user->id . '">' . $user->firstname . ' (' . $user->email . ')</option>';
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="form-inline align-items-start felement" data-fieldtype="select">
-                <select class="custom-select" name="rating">
-                    <?php
-
-                    echo '<option value="">' . get_string('choserating', 'local_rating_helper') . '</option>';
-                    for ($i = 1; $i <= 5; $i++) {
-                        $selected = (isset($ratingid) && $ratingid == $i) ? 'selected' : '';
-                        ?>
-                        <option <?= $selected ?> value="<?= $i ?>">
-                            <?php
-
-                            for ($k = 1; $k <= $i; $k++) {
-                                echo '✰';
-                            }
-                            ?>
-
-                        </option>
+                    <option <?= $selected ?> value="<?= $i ?>">
                         <?php
-                    }
-                    ?>
-                </select>
-            </div>
-            <div class="form-inline align-items-start felement" data-fieldtype="date">
-                <input value="<?=$date?>" class="p-1" type="date" name="date"/>
-            </div>
+
+                        for ($k = 1; $k <= $i; $k++) {
+                            echo '✰';
+                        }
+                        ?>
+
+                    </option>
+                    <?php
+                }
+                ?>
+            </select>
+            <input value="<?= $date ?>" class="form-control p-1" type="date" name="date"/>
             <input type="submit" name="submit" class="btn btn-primary" id="id_submit"
                    value="<?php
                    echo get_string('submit', 'local_rating_helper');
                    ?>"/>
-            <a href="<?= $CFG->wwwroot . '/local/rating_helper/all_ratings.php'?>" class="btn btn-primary"><?php
+            <a href="<?= $CFG->wwwroot . '/local/rating_helper/all_ratings.php' ?>" class="btn btn-primary"><?php
                 echo get_string('reset', 'local_rating_helper');
                 ?></a>
 

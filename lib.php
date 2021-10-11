@@ -220,7 +220,10 @@ function local_rating_helper_pluginfile($course, $cm, $context, $filearea, $args
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
-
+/**
+ * @param $courseid
+ * @return string
+ */
 function get_course_image_url($courseid){
     global $CFG,$OUTPUT;
     $data = new stdClass();
@@ -234,6 +237,11 @@ function get_course_image_url($courseid){
     $filename = basename($courseimage);
     return $CFG->wwwroot.'/pluginfile.php/1/local_rating_helper/overview/'.$courseid.'/'.$filename;
 }
+
+/**
+ * @param $star
+ * @return string
+ */
 function generate_star_dom($star){
     $htm = '<div class="">';
     for($i=0; $i<$star; $i++ ){
@@ -246,6 +254,12 @@ function generate_star_dom($star){
 
     return $htm;
 }
+
+/**
+ * @param $str
+ * @param int $wordCount
+ * @return string
+ */
 function get_snippet( $str, $wordCount = 10 ) {
     return implode(
         '',

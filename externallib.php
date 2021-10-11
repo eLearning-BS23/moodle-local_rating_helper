@@ -15,25 +15,31 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The externallib of the elediawebservicesuite.
- *
- * Here you'll find the methods you can directly access through
- * the webservice.
+ * External Library
  *
  * @package    local
  * @subpackage rating_helper
- * @author     Benjamin Wolf <support@eledia.de>
- * @copyright  2020 eLeDia GmbH
+ * @author     Brain Station 23
+ * @copyright  2021 Brain Station 23 Limited
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+global $CFG;
+
 defined('MOODLE_INTERNAL') || die;
-require_once($CFG->libdir.'/externallib.php');
+require_once($CFG->libdir . '/externallib.php');
 
-class rating_helper_services extends external_api {
+/*
+ *
+ * @subpackage rating_helper
+ */
 
-    public static function get_all_ratings_parameters()
-    {
+class rating_helper_services extends external_api
+{
+    /**
+     * @return external_function_parameters
+     */
+    public static function get_all_ratings_parameters() {
         return new external_function_parameters(
             array(
                 'cmid' =>
@@ -42,8 +48,15 @@ class rating_helper_services extends external_api {
             )
         );
     }
-    public static function get_all_ratings($cmid)
-    {
+
+    /**
+     * @param $cmid
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     */
+    public static function get_all_ratings($cmid) {
         global $DB, $OUTPUT;
         // Parameter validation.
         $params = self::validate_parameters(
@@ -53,8 +66,8 @@ class rating_helper_services extends external_api {
             )
         );
 
-        if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-            $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
+        if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
+            $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
             $output['success'] = false;
             return $output;
         }
@@ -62,11 +75,11 @@ class rating_helper_services extends external_api {
         $allratingList = 'select lrh.*,lrc.*,u.firstname,u.lastname from {local_rating_helper} as lrh 
                 LEFT JOIN {user} as u ON u.id = lrh.userid 
                 LEFT JOIN {local_rating_comment} as lrc ON lrh.id = lrc.ratingid 
-                where cmid = '.$cmid;
+                where cmid = ' . $cmid;
         $allratings = $DB->get_records_sql($allratingList);
 
         $newArr = [];
-        foreach ($allratings as $data){
+        foreach ($allratings as $data) {
             $pfpic = '';
             $user = core_user::get_user($data->userid);
             $pfpic = $OUTPUT->user_picture($user, array('size' => 100));
@@ -81,27 +94,33 @@ class rating_helper_services extends external_api {
                 'lastname' => $data->lastname,
                 'profilepicture' => $pfpic
             ];
-            array_push($newArr,$outpuArr);
+            array_push($newArr, $outpuArr);
         }
 
-        $output['result'] = get_string('found','local_rating_helper',[$params['cmid']]);;
+        $output['result'] = get_string('found', 'local_rating_helper', [$params['cmid']]);;
         $output['success'] = true;
         $output['ratings'] = $newArr;
         return $output;
 
     }
-    public static function get_all_ratings_returns()
-    {
+
+    /**
+     * @return external_single_structure
+     */
+    public static function get_all_ratings_returns() {
         return new external_single_structure(
             array(
-                'success'   => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
-                'result'    => new external_value(PARAM_RAW, 'Return message'),
-                'ratings'    => new external_multiple_structure(self::ratings_list_structure()),
+                'success' => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
+                'result' => new external_value(PARAM_RAW, 'Return message'),
+                'ratings' => new external_multiple_structure(self::ratings_list_structure()),
             )
         );
     }
-    public static function get_indivisual_rating_parameters()
-    {
+
+    /**
+     * @return external_function_parameters
+     */
+    public static function get_indivisual_rating_parameters() {
         return new external_function_parameters(
             array(
                 'cmid' =>
@@ -110,9 +129,16 @@ class rating_helper_services extends external_api {
             )
         );
     }
-    public static function get_indivisual_rating($cmid)
-    {
-        global $DB,$OUTPUT;
+
+    /**
+     * @param $cmid
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     * @throws invalid_parameter_exception
+     */
+    public static function get_indivisual_rating($cmid) {
+        global $DB, $OUTPUT;
         // Parameter validation.
         $params = self::validate_parameters(
             self::get_indivisual_rating_parameters(),
@@ -121,8 +147,8 @@ class rating_helper_services extends external_api {
             )
         );
 
-        if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-            $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
+        if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
+            $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
             $output['success'] = false;
             return $output;
         }
@@ -134,7 +160,7 @@ class rating_helper_services extends external_api {
             (select COUNT(*) FROM mdl_local_rating_helper where rating = 4 ) as rating4,
             (select COUNT(*) FROM mdl_local_rating_helper where rating = 5 ) as rating5
         FROM mdl_local_rating_helper r
-        WHERE r.cmid = '.$cmid.' limit 1';
+        WHERE r.cmid = ' . $cmid . ' limit 1';
         $ratingList = $DB->get_record_sql($sql);
 
         $output['rated1'] = $ratingList->rating1 ?? 0;
@@ -142,22 +168,25 @@ class rating_helper_services extends external_api {
         $output['rated3'] = $ratingList->rating3 ?? 0;
         $output['rated4'] = $ratingList->rating4 ?? 0;
         $output['rated5'] = $ratingList->rating5 ?? 0;
-        $output['result'] = get_string('notfound','local_rating_helper',[$params['cmid']]);
+        $output['result'] = get_string('notfound', 'local_rating_helper', [$params['cmid']]);
         $output['success'] = true;
         return $output;
 
     }
-    public static function get_indivisual_rating_returns()
-    {
+
+    /**
+     * @return external_single_structure
+     */
+    public static function get_indivisual_rating_returns() {
         return new external_single_structure(
             array(
-                'success'   => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
-                'result'    => new external_value(PARAM_RAW, 'Return message'),
-                'rated1'    => new external_value(PARAM_INT, 'Return value'),
-                'rated2'    => new external_value(PARAM_INT, 'Return value'),
-                'rated3'    => new external_value(PARAM_INT, 'Return value'),
-                'rated4'    => new external_value(PARAM_INT, 'Return value'),
-                'rated5'    => new external_value(PARAM_INT, 'Return value'),
+                'success' => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
+                'result' => new external_value(PARAM_RAW, 'Return message'),
+                'rated1' => new external_value(PARAM_INT, 'Return value'),
+                'rated2' => new external_value(PARAM_INT, 'Return value'),
+                'rated3' => new external_value(PARAM_INT, 'Return value'),
+                'rated4' => new external_value(PARAM_INT, 'Return value'),
+                'rated5' => new external_value(PARAM_INT, 'Return value'),
             )
         );
     }
@@ -174,7 +203,7 @@ class rating_helper_services extends external_api {
                 ),
                 'cmid' =>
                     new external_value(PARAM_INT, 'The Id of the course module to check for.'
-                )
+                    )
             )
         );
     }
@@ -201,13 +230,13 @@ class rating_helper_services extends external_api {
 
         // Data validation.
         try {
-            if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
+            if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
+                $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
                 $output['success'] = false;
                 return $output;
             }
-            if (! ($user = $DB->get_record('user', array('id' => $params['userid'])))) {
-                $output['result'] = get_string('usernotfound','local_rating_helper',[$params['userid']]);
+            if (!($user = $DB->get_record('user', array('id' => $params['userid'])))) {
+                $output['result'] = get_string('usernotfound', 'local_rating_helper', [$params['userid']]);
                 $output['success'] = false;
                 return $output;
             }
@@ -217,8 +246,8 @@ class rating_helper_services extends external_api {
             return $output;
         }
 
-        require_once($CFG->dirroot.'/local/rating_helper/lib.php');
-        if (user_has_rated ($userid, $cmid)) {
+        require_once($CFG->dirroot . '/local/rating_helper/lib.php');
+        if (user_has_rated($userid, $cmid)) {
             $output['result'] = 'User already rated.';
             $output['success'] = true;
             $output['rated'] = true;
@@ -239,9 +268,9 @@ class rating_helper_services extends external_api {
     public static function user_has_rated_returns() {
         return new external_single_structure(
             array(
-                'success'   => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
-                'result'    => new external_value(PARAM_RAW, 'Return message'),
-                'rated'    => new external_value(PARAM_RAW, 'Return message', VALUE_OPTIONAL),
+                'success' => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
+                'result' => new external_value(PARAM_RAW, 'Return message'),
+                'rated' => new external_value(PARAM_RAW, 'Return message', VALUE_OPTIONAL),
             )
         );
     }
@@ -256,16 +285,16 @@ class rating_helper_services extends external_api {
             array(
                 'userid' =>
                     new external_value(PARAM_INT, 'Id of the user who rated.'
-                ),
+                    ),
                 'cmid' =>
                     new external_value(PARAM_INT, 'The Id of the course module to rate for.'
-                ),
+                    ),
                 'rating' =>
                     new external_value(PARAM_INT, 'The rate value.'
-                ),
+                    ),
                 'comment' =>
                     new external_value(PARAM_TEXT, 'The message value.'
-                )
+                    )
             )
         );
     }
@@ -296,13 +325,13 @@ class rating_helper_services extends external_api {
 
         // Data validation.
         try {
-            if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
+            if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
+                $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
                 $output['success'] = false;
                 return $output;
             }
-            if (! ($user = $DB->get_record('user', array('id' => $params['userid'])))) {
-                $output['result'] = get_string('usernotfound','local_rating_helper',[$params['userid']]);
+            if (!($user = $DB->get_record('user', array('id' => $params['userid'])))) {
+                $output['result'] = get_string('usernotfound', 'local_rating_helper', [$params['userid']]);
                 $output['success'] = false;
                 return $output;
             }
@@ -312,9 +341,9 @@ class rating_helper_services extends external_api {
             return $output;
         }
 
-        require_once($CFG->dirroot.'/local/rating_helper/lib.php');
+        require_once($CFG->dirroot . '/local/rating_helper/lib.php');
 
-        $id = save_rating ($userid, $cmid, $rating,$comment);
+        $id = save_rating($userid, $cmid, $rating, $comment);
         if ($id) {
             $output['success'] = true;
         } else {
@@ -322,7 +351,7 @@ class rating_helper_services extends external_api {
         }
 
         if ($output['success']) {
-            $output['result'] = get_string('ratingsaved','local_rating_helper');
+            $output['result'] = get_string('ratingsaved', 'local_rating_helper');
         } else {
             $output['result'] = 'user has already rated.';
         }
@@ -337,8 +366,8 @@ class rating_helper_services extends external_api {
     public static function save_rating_returns() {
         return new external_single_structure(
             array(
-                'success'   => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
-                'result'    => new external_value(PARAM_RAW, 'Return message'),
+                'success' => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
+                'result' => new external_value(PARAM_RAW, 'Return message'),
             )
         );
     }
@@ -353,7 +382,7 @@ class rating_helper_services extends external_api {
             array(
                 'cmid' =>
                     new external_value(PARAM_INT, 'The Id of the course module to rate for.'
-                ),
+                    ),
             )
         );
     }
@@ -378,8 +407,8 @@ class rating_helper_services extends external_api {
 
         // Data validation.
         try {
-            if (! ($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['cmid']]);
+            if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
+                $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
                 $output['success'] = false;
                 return $output;
             }
@@ -389,10 +418,10 @@ class rating_helper_services extends external_api {
             return $output;
         }
 
-        require_once($CFG->dirroot.'/local/rating_helper/lib.php');
+        require_once($CFG->dirroot . '/local/rating_helper/lib.php');
 
-        $output['rating'] = get_cm_rating ($cmid);
-        $output['result'] = 'Average rating '.$output['rating'];
+        $output['rating'] = get_cm_rating($cmid);
+        $output['result'] = 'Average rating ' . $output['rating'];
         $output['success'] = true;
         return $output;
     }
@@ -405,9 +434,9 @@ class rating_helper_services extends external_api {
     public static function get_cm_rating_returns() {
         return new external_single_structure(
             array(
-                'success'   => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
-                'result'    => new external_value(PARAM_RAW, 'Return message'),
-                'rating'    => new external_value(PARAM_RAW, 'Course module rating'),
+                'success' => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
+                'result' => new external_value(PARAM_RAW, 'Return message'),
+                'rating' => new external_value(PARAM_RAW, 'Course module rating'),
             )
         );
     }
@@ -422,7 +451,7 @@ class rating_helper_services extends external_api {
             array(
                 'courseid' =>
                     new external_value(PARAM_INT, 'The Id of the course to get the rate for.'
-                ),
+                    ),
             )
         );
     }
@@ -447,8 +476,8 @@ class rating_helper_services extends external_api {
 
         // Data validation.
         try {
-            if (! ($course = $DB->get_record('course', array('id' => $params['courseid'])))) {
-                $output['result'] = get_string('coursenotfound','local_rating_helper',[$params['courseid']]);
+            if (!($course = $DB->get_record('course', array('id' => $params['courseid'])))) {
+                $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['courseid']]);
                 $output['success'] = false;
                 return $output;
             }
@@ -458,17 +487,17 @@ class rating_helper_services extends external_api {
             return $output;
         }
 
-        require_once($CFG->dirroot.'/local/rating_helper/lib.php');
+        require_once($CFG->dirroot . '/local/rating_helper/lib.php');
 
-        $finalrating = get_course_rating ($courseid);
+        $finalrating = get_course_rating($courseid);
         $finalreviewcount = 0;
 
-        if($finalrating>0){
-            $finalreviewcount = get_number_of_reviews ($courseid);
+        if ($finalrating > 0) {
+            $finalreviewcount = get_number_of_reviews($courseid);
         }
 
         $output['rating'] = $finalrating;
-        $output['result'] = 'Average rating '.$output['rating'];
+        $output['result'] = 'Average rating ' . $output['rating'];
         $output['success'] = true;
         $output['reviewcount'] = $finalreviewcount;
         return $output;
@@ -482,10 +511,10 @@ class rating_helper_services extends external_api {
     public static function get_course_rating_returns() {
         return new external_single_structure(
             array(
-                'success'   => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
-                'result'    => new external_value(PARAM_RAW, 'Return message'),
-                'rating'    => new external_value(PARAM_RAW, 'Course rating'),
-                'reviewcount'    => new external_value(PARAM_RAW, 'Course review count'),
+                'success' => new external_value(PARAM_BOOL, 'Return success of operation true or false'),
+                'result' => new external_value(PARAM_RAW, 'Return message'),
+                'rating' => new external_value(PARAM_RAW, 'Course rating'),
+                'reviewcount' => new external_value(PARAM_RAW, 'Course review count'),
             )
         );
     }
@@ -495,8 +524,7 @@ class rating_helper_services extends external_api {
      *
      * @return external_single_structure External single structure
      */
-    private static function ratings_list_structure()
-    {
+    private static function ratings_list_structure() {
         return new external_single_structure(
             array(
                 'id' => new external_value(PARAM_INT, 'Issue id'),

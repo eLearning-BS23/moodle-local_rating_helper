@@ -15,10 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for local_rating_helper.
+ * Local Rating Helper
  *
- * @package    local_rating_helper
- * @copyright  2019 eLeDia
+ * @package    local
+ * @subpackage rating_helper
+ * @author     Brain Station 23
+ * @copyright  2021 Brain Station 23 Limited
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -36,7 +38,8 @@ use \core_privacy\local\request\approved_userlist;
 /**
  * Privacy Subsystem implementation for local_rating_helper.
  *
- * @copyright  2019 eLeDia
+ * @author     Brain Station 23
+ * @copyright  2021 Brain Station 23 Limited
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements

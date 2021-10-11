@@ -19,8 +19,8 @@
  *
  * @package    local
  * @subpackage rating_helper
- * @author     Benjamin Wolf <support@eledia.de>
- * @copyright  2020 eLeDia GmbH
+ * @author     Brain Station 23
+ * @copyright  2021 Brain Station 23 Limited
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
