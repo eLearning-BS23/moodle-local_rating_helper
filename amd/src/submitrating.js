@@ -44,10 +44,10 @@ define(['jquery', 'core/str','core/notification', 'core/ajax'], function ($, str
                     $('#one-star').html(data.rated1);
 
                 } else {
-                    notification.addNotification({
-                        message: data.result,
-                        type: 'error'
-                    });
+                    // notification.addNotification({
+                    //     message: data.result,
+                    //     type: 'error'
+                    // });
                 }
             }).fail(notification.exception);
         } catch (e) {
@@ -70,25 +70,27 @@ define(['jquery', 'core/str','core/notification', 'core/ajax'], function ($, str
             ajax.call([request])[0].done(function (data) {
                 if (data.success == true) {
                     var htm = '';
+
                     if (data.ratings.length > 0) {
+
                         data.ratings.forEach((item) => {
-                            var today  = new Date(item.ratingdate);
-                            htm += '<div class="middle-last-part">' +
-                                '                            <div class="person-rating">' +
-                                '                                <div class="person">' +item.profilepicture +
-                                '                                </div>' +
-                                '                                <p class="person-name">' + item.firstname + ' ' + item.lastname + '</p>' +
-                                '                                <span class="date">' + today.toLocaleString() + '</span>' +
-                                '                            </div>' +
-                                '                            <div class="person-comment">' +
-                                '                                <p class="comment-of-person"> ' + item.comment +
-                                '                                </p>' +
-                                '                                <div class="star-rate">' +
-                                '                                    <h5 class=""> ' + generate_rating_star(item.rating) +
-                                '                                    </h5>' +
-                                '                                </div>' +
-                                '                            </div>' +
-                                '                        </div>';
+                        var today  = new Date(item.ratingdate);
+                        htm += '<div class="middle-last-part">' +
+                            '<div class="person-rating">' +
+                            '    <div class="person">' +item.profilepicture +
+                            '    </div>' +
+                            '    <p class="person-name">' + item.firstname + ' ' + item.lastname + '</p>' +
+                            '    <span class="date">' + today.toLocaleString() + '</span>' +
+                            '</div>' +
+                            '<div class="person-comment">' +
+                            '    <p class="comment-of-person"> ' + item.comment +
+                            '    </p>' +
+                            '    <div class="star-rate">' +
+                            '        <h5 class=""> ' + generate_rating_star(item.rating) +
+                            '        </h5>' +
+                            '    </div>' +
+                            '</div>' +
+                            '</div>';
                         });
                         $('#total-rating').html(data.ratings.length);
                     }
@@ -172,8 +174,8 @@ define(['jquery', 'core/str','core/notification', 'core/ajax'], function ($, str
                 if (rating == undefined) {
                     str.get_string('ratingfailed', 'local_rating_helper').then(function(langString) {
                         notification.addNotification({
-                            message: langString,
-                            type: 'error'
+message: langString,
+type: 'error'
                         });
 
                     }).catch(Notification.exception);
@@ -199,21 +201,21 @@ define(['jquery', 'core/str','core/notification', 'core/ajax'], function ($, str
                 try {
                     ajax.call([request])[0].done(function (data) {
                         if (data.success == 1) {
-                            $('input[name="star"]').prop('checked', false);
-                            $('#rating-form').addClass('d-none');
-                            render_avg_rating(courseid);
-                            render_indivisual_rating(courseid);
-                            render_ratings(courseid);
-                            notification.addNotification({
-                                message: data.result,
-                                type: 'success'
-                            });
+$('input[name="star"]').prop('checked', false);
+$('#rating-form').addClass('d-none');
+render_avg_rating(courseid);
+render_indivisual_rating(courseid);
+render_ratings(courseid);
+notification.addNotification({
+    message: data.result,
+    type: 'success'
+});
 
                         } else {
-                            notification.addNotification({
-                                message: data.result,
-                                type: 'error'
-                            });
+notification.addNotification({
+    message: data.result,
+    type: 'error'
+});
                         }
                     }).fail(notification.exception);
                 } catch (e) {
