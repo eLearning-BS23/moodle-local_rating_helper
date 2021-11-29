@@ -57,7 +57,9 @@ class rating_helper_services extends external_api
      * @throws invalid_parameter_exception
      */
     public static function get_all_ratings($cmid) {
+
         global $DB, $OUTPUT, $CFG, $PAGE;
+        $newArr = [];
 
         // Parameter validation.
         $params = self::validate_parameters(
@@ -73,6 +75,7 @@ class rating_helper_services extends external_api
         if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
             $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
             $output['success'] = false;
+            $output['ratings'] = $newArr;
             return $output;
         }
 
@@ -82,29 +85,37 @@ class rating_helper_services extends external_api
                 where cmid = ' . $cmid;
         $allratings = $DB->get_records_sql($allratingList);
 
-        $newArr = [];
-        foreach ($allratings as $data) {
-            $pfpic = '';
-            $user = core_user::get_user($data->userid) ?? [];
 
-            $pfpic = $OUTPUT->user_picture($user, array('size' => 100));
-            $outpuArr = [
-                'id' => $data->id,
-                'userid' => $data->userid,
-                'cmid' => $data->cmid,
-                'rating' => $data->rating,
-                'ratingdate' => $data->ratingdate,
-                'comment' => $data->comment,
-                'firstname' => $data->firstname,
-                'lastname' => $data->lastname,
-                'profilepicture' => strval($pfpic)
-            ];
-            array_push($newArr, $outpuArr);
+        if (count($allratings) > 0)
+        {
+            foreach ($allratings as $data) {
+
+                $pfpic = '';
+                $user = core_user::get_user($data->userid) ?? [];
+
+                $pfpic = $OUTPUT->user_picture($user, array('size' => 100));
+                $outpuArr = [
+                    'id' => $data->id,
+                    'userid' => $data->userid,
+                    'cmid' => $data->cmid,
+                    'rating' => $data->rating,
+                    'ratingdate' => $data->ratingdate,
+                    'comment' => $data->comment,
+                    'firstname' => $data->firstname,
+                    'lastname' => $data->lastname,
+                    'profilepicture' => strval($pfpic)
+                ];
+                array_push($newArr, $outpuArr);
+            }
+            $output['result'] = get_string('found', 'local_rating_helper', [$params['cmid']]);;
+            $output['success'] = true;
+            $output['ratings'] = $newArr;
         }
-
-        $output['result'] = get_string('found', 'local_rating_helper', [$params['cmid']]);;
-        $output['success'] = true;
-        $output['ratings'] = $newArr;
+        else{
+            $output['result'] = get_string('norecordsfound', 'local_rating_helper');
+            $output['success'] = false;
+            $output['ratings'] = $newArr;
+        }
 
         return $output;
 
@@ -155,7 +166,12 @@ class rating_helper_services extends external_api
 
         if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
             $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
-            $output['success'] = false;
+            $output['rated1'] = $ratingList->rating1 ?? 0;
+            $output['rated2'] = $ratingList->rating2 ?? 0;
+            $output['rated3'] = $ratingList->rating3 ?? 0;
+            $output['rated4'] = $ratingList->rating4 ?? 0;
+            $output['rated5'] = $ratingList->rating5 ?? 0;
+            $output['success'] = true;
             return $output;
         }
 
