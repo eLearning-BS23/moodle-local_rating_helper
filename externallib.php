@@ -176,13 +176,12 @@ class rating_helper_services extends external_api
         }
 
         $sql = 'SELECT
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 1 ) as rating1,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 2) as rating2,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 3 ) as rating3,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 4 ) as rating4,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 5 ) as rating5
-        FROM mdl_local_rating_helper r
-        WHERE r.cmid = ' . $cmid . ' limit 1';
+            (select COUNT(*) FROM mdl_local_rating_helper where rating = 1 AND cmid = ' . $cmid .') as rating1,
+            (select COUNT(*) FROM mdl_local_rating_helper where rating = 2 AND cmid = ' . $cmid .') as rating2,
+            (select COUNT(*) FROM mdl_local_rating_helper where rating = 3 AND cmid = ' . $cmid .') as rating3,
+            (select COUNT(*) FROM mdl_local_rating_helper where rating = 4 AND cmid = ' . $cmid .') as rating4,
+            (select COUNT(*) FROM mdl_local_rating_helper where rating = 5  AND cmid = ' . $cmid .') as rating5
+        FROM mdl_local_rating_helper limit 1';
         $ratingList = $DB->get_record_sql($sql);
 
         $output['rated1'] = $ratingList->rating1 ?? 0;
