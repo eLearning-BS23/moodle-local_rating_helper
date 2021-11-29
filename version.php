@@ -26,8 +26,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2021102111;   // The (date) version of this plugin.
-$plugin->release = '1.0.2';
+$plugin->version  = 2021102112;   // The (date) version of this plugin.
+$plugin->release = '1.0.3';
 $plugin->requires  = 2019052002;        // Requires this Moodle version.
 $plugin->component = 'local_rating_helper'; // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE;
