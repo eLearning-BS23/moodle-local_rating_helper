@@ -47,6 +47,8 @@ $string['choseuser'] = 'Chose User';
 $string['chosecourse'] = 'Course Rating';
 $string['reset'] = 'Reset';
 $string['found'] = 'Data found';
+$string['norecordsfound'] = 'Course Not found';
+$string['noretingsfound'] = 'No Course Rating found';
 
 $string['privacy:metadata:database:local_rating_helper'] = 'Stores the ratings the user has made for the course modules.';
 $string['privacy:metadata:database:local_rating_helper:userid'] = 'Id of the user who has rated.';

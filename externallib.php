@@ -112,7 +112,7 @@ class rating_helper_services extends external_api
             $output['ratings'] = $newArr;
         }
         else{
-            $output['result'] = get_string('norecordsfound', 'local_rating_helper');
+            $output['result'] = get_string('noretingsfound', 'local_rating_helper');
             $output['success'] = false;
             $output['ratings'] = $newArr;
         }
