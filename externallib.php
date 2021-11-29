@@ -222,49 +222,49 @@ class rating_helper_services extends external_api
      * @return array
      * @throws {moodle_exception}
      */
-//    public static function user_has_rated($userid, $cmid) {
-//        global $DB, $CFG, $USER;
-//
-//        // Parameter validation.
-//        $params = self::validate_parameters(
-//            self::user_has_rated_parameters(),
-//            array(
-//                'cmid' => $cmid,
-//                'userid' => $userid,
-//            )
-//        );
-//
-//        // Data validation.
-//        try {
-//            if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
-//                $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
-//                $output['success'] = false;
-//                return $output;
-//            }
-//            if (!($user = $DB->get_record('user', array('id' => $params['userid'])))) {
-//                $output['result'] = get_string('usernotfound', 'local_rating_helper', [$params['userid']]);
-//                $output['success'] = false;
-//                return $output;
-//            }
-//        } catch (Exception $exc) {
-//            $output['result'] = $exc->getMessage();
-//            $output['success'] = false;
-//            return $output;
-//        }
-//
-//        require_once($CFG->dirroot . '/local/rating_helper/lib.php');
-//        if (user_has_rated($userid, $cmid)) {
-//            $output['result'] = 'User already rated.';
-//            $output['success'] = true;
-//            $output['rated'] = true;
-//            return $output;
-//        } else {
-//            $output['result'] = 'User has not rated.';
-//            $output['success'] = true;
-//            $output['rated'] = false;
-//            return $output;
-//        }
-//    }
+    public static function user_has_rated($userid, $cmid) {
+        global $DB, $CFG, $USER;
+
+        // Parameter validation.
+        $params = self::validate_parameters(
+            self::user_has_rated_parameters(),
+            array(
+                'cmid' => $cmid,
+                'userid' => $userid,
+            )
+        );
+
+        // Data validation.
+        try {
+            if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
+                $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
+                $output['success'] = false;
+                return $output;
+            }
+            if (!($user = $DB->get_record('user', array('id' => $params['userid'])))) {
+                $output['result'] = get_string('usernotfound', 'local_rating_helper', [$params['userid']]);
+                $output['success'] = false;
+                return $output;
+            }
+        } catch (Exception $exc) {
+            $output['result'] = $exc->getMessage();
+            $output['success'] = false;
+            return $output;
+        }
+
+        require_once($CFG->dirroot . '/local/rating_helper/lib.php');
+        if (user_has_rated($userid, $cmid)) {
+            $output['result'] = 'User already rated.';
+            $output['success'] = true;
+            $output['rated'] = true;
+            return $output;
+        } else {
+            $output['result'] = 'User has not rated.';
+            $output['success'] = true;
+            $output['rated'] = false;
+            return $output;
+        }
+    }
 
     /**
      * Returndefinition for method "user_has_rated"
