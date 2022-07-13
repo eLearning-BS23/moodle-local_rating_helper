@@ -27,7 +27,7 @@ people who have already submitted ratings.
 ## Installing via Plugin Directory ##
 
 You can install this plugin from [Moodle plugins directory](https://moodle.org/plugins) or can download
-from [Github](https://github.com/takielias/moodle-local_rating_helper/releases/latest).
+from [Github](https://github.com/eLearning-BS23/moodle-local_rating_helper/releases/latest).
 
 ## Installing via uploaded ZIP file ##
 
