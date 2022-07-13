@@ -1,0 +1,27 @@
+<div class="d-flex mb-2">
+        <a href="{{coursesurl}}" class="btn btn-outline-primary pull-right">Courses</a>
+</div>
+
+<form autocomplete="off" method="GET" accept-charset="utf-8" class="mform">
+    <div class="d-flex mb-2">
+        <select class="form-control custom-select" name="course">
+            {{#courses}}
+                <option value="{{value}}" {{#selected}}selected{{/selected}}>{{text}}</option>
+            {{/courses}}
+        </select>
+        <select class="form-control custom-select" name="user">
+            {{#users}}
+                <option value="{{value}}" {{#selected}}selected{{/selected}}>{{text}}</option>
+            {{/users}}
+        </select>
+        <select class="form-control custom-select" name="rating">
+            {{#ratings}}
+                <option value="{{value}}" {{#selected}}selected{{/selected}}>{{{text}}}</option>
+            {{/ratings}}
+        </select>
+        <input value="{{date}}" class="form-control p-1" type="date" name="date"/>
+        <input type="submit" name="submit" class="btn btn-outline-primary" id="id_submit"
+               value="{{submit}}"/>
+        <a href="{{allratingsurl}}" class="btn btn-outline-primary">{{reset}}</a>
+    </div>
+</form>

@@ -32,11 +32,11 @@
  * @return bool
  * @throws dml_exception
  */
-function user_has_rated ($userid, $cmid) {
+function user_has_rated($userid, $cmid) {
     global $DB;
-    if($DB->record_exists('local_rating_helper', array('userid' => $userid, 'cmid' => $cmid))){
+    if ($DB->record_exists('local_rating_helper', array('userid' => $userid, 'cmid' => $cmid))) {
         return $DB->record_exists('local_rating_helper', array('userid' => $userid, 'cmid' => $cmid));
-    }else{
+    } else {
         return false;
     }
 }
@@ -50,7 +50,7 @@ function user_has_rated ($userid, $cmid) {
  * @return bool
  * @throws dml_exception
  */
-function save_rating ($userid, $cmid, $rating,$comment) {
+function save_rating($userid, $cmid, $rating, $comment) {
     global $DB;
 
     // Validate input.
@@ -67,18 +67,18 @@ function save_rating ($userid, $cmid, $rating,$comment) {
         // Rating for this user already saved.
         return false;
     } else {
-        $new_rating = new stdClass();
-        $new_rating->userid = $userid;
-        $new_rating->cmid = $cmid;
-        $new_rating->rating = $rating;
-        $new_rating->ratingdate = date("Y-m-d H:i:s");
-        $data = $DB->insert_record('local_rating_helper', $new_rating);
+        $newrating = new stdClass();
+        $newrating->userid = $userid;
+        $newrating->cmid = $cmid;
+        $newrating->rating = $rating;
+        $newrating->ratingdate = date("Y-m-d H:i:s");
+        $data = $DB->insert_record('local_rating_helper', $newrating);
 
-        $rating_comment = new stdClass();
-        $rating_comment->ratingid =$data;
-        $rating_comment->comment =$comment;
-        $rating_comment->ratingdate = date("Y-m-d H:i:s");
-        return $DB->insert_record('local_rating_comment',$rating_comment );
+        $ratingcomment = new stdClass();
+        $ratingcomment->ratingid = $data;
+        $ratingcomment->comment = $comment;
+        $ratingcomment->ratingdate = date("Y-m-d H:i:s");
+        return $DB->insert_record('local_rating_comment', $ratingcomment);
 
     }
 }
@@ -90,7 +90,7 @@ function save_rating ($userid, $cmid, $rating,$comment) {
  * @return int/false
  * @throws dml_exception
  */
-function get_cm_rating ($cmid) {
+function get_cm_rating($cmid) {
     global $DB;
 
     $ratings = $DB->get_records('local_rating_helper', array('cmid' => $cmid));
@@ -98,12 +98,12 @@ function get_cm_rating ($cmid) {
     if (empty($ratings)) {
         return false;
     }
-    $ratings_array = array();
+    $ratingsarray = array();
     foreach ($ratings as $rating) {
-        $ratings_array[] = $rating->rating;
+        $ratingsarray[] = $rating->rating;
     }
 
-    $avrg = (array_sum($ratings_array) / count($ratings_array));
+    $avrg = (array_sum($ratingsarray) / count($ratingsarray));
     return $avrg;
 }
 
@@ -114,19 +114,18 @@ function get_cm_rating ($cmid) {
  * @return bool
  * @throws dml_exception
  */
-function get_course_rating ($courseid) {
-    global $DB;
+function get_course_rating($courseid) {
 
-    $mod_list = get_course_mods($courseid);
+    $modlist = get_course_mods($courseid);
     $ratings = array();
-    foreach ($mod_list as $mod) {
-        $rating = get_cm_rating ($mod->id);
+    foreach ($modlist as $mod) {
+        $rating = get_cm_rating($mod->id);
         if (!empty($rating)) {
             $ratings[] = $rating;
         }
     }
 
-    if(count($ratings) > 0){
+    if (count($ratings) > 0) {
         $avrg = (array_sum($ratings) / count($ratings));
         return $avrg;
     }
@@ -140,16 +139,15 @@ function get_course_rating ($courseid) {
  * @return int/false
  * @throws dml_exception
  */
-function get_cm_review_count ($cmid) {
+function get_cm_review_count($cmid) {
     global $DB;
 
     $sql = "SELECT DISTINCT userid FROM {local_rating_helper} WHERE cmid=:cmid";
-    $reviews = $DB->get_records_sql($sql, array('cmid'=>$cmid));
+    $reviews = $DB->get_records_sql($sql, array('cmid' => $cmid));
 
-    if(count($reviews)>0){
+    if (count($reviews) > 0) {
         return count($reviews);
-    }
-    else{
+    } else {
         return 0;
     }
 }
@@ -161,28 +159,39 @@ function get_cm_review_count ($cmid) {
  * @return bool
  * @throws dml_exception
  */
-function get_number_of_reviews ($courseid) {
-    global $DB;
+function get_number_of_reviews($courseid) {
 
-    $mod_list = get_course_mods($courseid);
+    $modlist = get_course_mods($courseid);
     $reveiwers = array();
-    foreach ($mod_list as $mod) {
-        $reviewer = get_cm_review_count ($mod->id);
+    foreach ($modlist as $mod) {
+        $reviewer = get_cm_review_count($mod->id);
         if (!empty($reviewer)) {
             $reveiwers[] = $reviewer;
         }
     }
 
-    if(count($reveiwers) > 0){
+    if (count($reveiwers) > 0) {
         $sum = array_sum($reveiwers);
         return $sum;
-    }
-    else{
+    } else {
         return "0";
     }
 }
 
 
+/**
+ * Generate * rating
+ *
+ * @param $count
+ * @return string
+ */
+function rating_count($count) {
+    $str = '';
+    for ($k = 1; $k <= $count; $k++) {
+        $str .= '✰';
+    }
+    return $str;
+}
 
 /**
  * Serve the files from the MYPLUGIN file areas
@@ -196,24 +205,24 @@ function get_number_of_reviews ($courseid) {
  * @param array $options additional options affecting the file serving
  * @return bool false if the file not found, just send the file otherwise and do not return anything
  */
-function local_rating_helper_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
-    global $OUTPUT;
+function local_rating_helper_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
+
     $courseid = array_shift($args);
     $filename = array_pop($args);
 
     $context = context_course::instance($courseid);
     $fs = get_file_storage();
 
-    // Prepare file record object
+    // Prepare file record object.
     $fileinfo = array(
-        'component' => 'course',     // usually = table name
-        'filearea' => 'overviewfiles',     // usually = table name
-        'itemid' => 0,               // usually = ID of row in table
-        'contextid' => $context->id, // ID of context
-        'filepath' => '/',           // any path beginning and ending in /
-        'filename' => $filename); // any filename
+        'component' => 'course',     // Usually = table name.
+        'filearea' => 'overviewfiles',     // Usually = table name.
+        'itemid' => 0,               // Usually = ID of row in table.
+        'contextid' => $context->id, // ID of context.
+        'filepath' => '/',           // Any path beginning and ending in.
+        'filename' => $filename); // Any filename.
 
-    // Get file
+    // Get file.
     $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
         $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
 
@@ -224,8 +233,8 @@ function local_rating_helper_pluginfile($course, $cm, $context, $filearea, $args
  * @param $courseid
  * @return string
  */
-function get_course_image_url($courseid){
-    global $CFG,$OUTPUT;
+function get_course_image_url($courseid) {
+    global $CFG, $OUTPUT;
     $data = new stdClass();
     $data->id = $courseid;
 
@@ -235,18 +244,30 @@ function get_course_image_url($courseid){
         return $courseimage;
     }
     $filename = basename($courseimage);
-    return $CFG->wwwroot.'/pluginfile.php/1/local_rating_helper/overview/'.$courseid.'/'.$filename;
+    return $CFG->wwwroot . '/pluginfile.php/1/local_rating_helper/overview/' . $courseid . '/' . $filename;
 }
 
 /**
  * @param $star
  * @return string
  */
-function generate_star_dom($star){
-    $htm = '<div class="">';
-    for($i=0; $i<$star; $i++ ){
-        $htm .= '<svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.58266 18.5634C3.48541 19.1178 4.03237 19.5517 4.51542 19.3034L10.002 16.4835L15.4885 19.3034C15.9715 19.5517 16.5185 19.1178 16.4212 18.5634L15.3841 12.6516L19.787 8.45578C20.1985 8.06366 19.9855 7.34671 19.4342 7.2684L13.3111 6.39856L10.581 0.990381C10.3351 0.503206 9.66885 0.503206 9.42291 0.990381L6.69276 6.39856L0.569668 7.2684C0.0184315 7.34671 -0.194569 8.06366 0.216907 8.45578L4.61982 12.6516L3.58266 18.5634ZM9.71342 15.1033L5.10623 17.4712L5.97405 12.5246C6.01495 12.2915 5.93803 12.0527 5.77061 11.8931L2.13706 8.4305L7.20245 7.71092C7.41184 7.68117 7.59468 7.54743 7.69346 7.35176L10.002 2.77884L12.3104 7.35176C12.4092 7.54743 12.5921 7.68117 12.8015 7.71092L17.8668 8.4305L14.2333 11.8931C14.0659 12.0527 13.989 12.2915 14.0299 12.5246L14.8977 17.4712L10.2905 15.1033C10.1085 15.0097 9.89541 15.0097 9.71342 15.1033Z"
+function generate_star_dom($star) {
+    $htm = '<div class="row">';
+    for ($i = 0; $i < $star; $i++) {
+        $htm .= '<svg width="20" height="20" viewBox="0 0 21 20" fill="none"
+xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.58266 18.5634C3.48541 19.1178 4.03237
+                            19.5517 4.51542 19.3034L10.002 16.4835L15.4885 19.3034C15.9715 19.5517
+                            16.5185 19.1178 16.4212 18.5634L15.3841 12.6516L19.787 8.45578C20.1985
+                            8.06366 19.9855 7.34671 19.4342 7.2684L13.3111 6.39856L10.581 0.990381C10.3351
+                            0.503206 9.66885 0.503206 9.42291 0.990381L6.69276 6.39856L0.569668
+                            7.2684C0.0184315 7.34671 -0.194569 8.06366 0.216907 8.45578L4.61982
+                            12.6516L3.58266 18.5634ZM9.71342 15.1033L5.10623 17.4712L5.97405
+                            12.5246C6.01495 12.2915 5.93803 12.0527 5.77061 11.8931L2.13706 8.4305L7.20245
+                            7.71092C7.41184 7.68117 7.59468 7.54743 7.69346 7.35176L10.002 2.77884L12.3104
+                            7.35176C12.4092 7.54743 12.5921
+                            7.68117 12.8015 7.71092L17.8668 8.4305L14.2333 11.8931C14.0659 12.0527 13.989 12.2915 14.0299
+                            12.5246L14.8977 17.4712L10.2905 15.1033C10.1085 15.0097 9.89541 15.0097 9.71342 15.1033Z"
                                   fill="#9CA4B6"/>
                         </svg>';
     }
@@ -257,21 +278,58 @@ function generate_star_dom($star){
 
 /**
  * @param $str
- * @param int $wordCount
+ * @param int $wordcount
  * @return string
  */
-function get_snippet( $str, $wordCount = 10 ) {
+function get_snippet($str, $wordcount = 10) {
     return implode(
         '',
         array_slice(
             preg_split(
                 '/([\s,\.;\?\!]+)/',
                 $str,
-                $wordCount*2+1,
+                $wordcount * 2 + 1,
                 PREG_SPLIT_DELIM_CAPTURE
             ),
             0,
-            $wordCount*2-1
+            $wordcount * 2 - 1
         )
     );
+}
+
+/**
+ * Inject the competencies elements into all moodle module settings forms.
+ *
+ * @param moodleform $formwrapper The moodle quickforms wrapper object.
+ * @param MoodleQuickForm $mform The actual form object (required to modify the form).
+ */
+function local_rating_helper_coursemodule_standard_elements($formwrapper, $mform) {
+    global $CFG, $COURSE;
+
+    if (!get_config('core_competency', 'enabled')) {
+        return;
+    } else if (!has_capability('moodle/competency:coursecompetencymanage', $formwrapper->get_context())) {
+        return;
+    }
+
+    $mform->addElement('header', 'competenciessection', get_string('competencies', 'core_competency'));
+
+    MoodleQuickForm::registerElementType('course_competencies',
+        "$CFG->dirroot/$CFG->admin/tool/lp/classes/course_competencies_form_element.php",
+        'tool_lp_course_competencies_form_element');
+    $cmid = null;
+    if ($cm = $formwrapper->get_coursemodule()) {
+        $cmid = $cm->id;
+    }
+    $options = array(
+        'courseid' => $COURSE->id,
+        'cmid' => $cmid
+    );
+    $mform->addElement('course_competencies', 'competencies', get_string('modcompetencies', 'tool_lp'), $options);
+    $mform->addHelpButton('competencies', 'modcompetencies', 'tool_lp');
+    MoodleQuickForm::registerElementType('course_competency_rule',
+        "$CFG->dirroot/$CFG->admin/tool/lp/classes/course_competency_rule_form_element.php",
+        'tool_lp_course_competency_rule_form_element');
+    // Reuse the same options.
+    $mform->addElement('course_competency_rule', 'competency_rule', get_string('uponcoursemodulecompletion', 'tool_lp'), $options);
 }

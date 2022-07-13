@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Settings information.
  *
  * @package    local
  * @subpackage rating_helper
@@ -28,16 +28,6 @@ defined('MOODLE_INTERNAL') || die;
 global $CFG;
 
 if ($hassiteconfig) {
-//    $settings = new admin_settingpage('local_rating_helper', get_string('pluginname', 'local_rating_helper'));
-//    $ADMIN->add('localplugins', $settings);
-    $ADMIN->add('localplugins', new admin_externalpage('local_rating_helper',get_string('pluginname','local_rating_helper'), $CFG->wwwroot.'/local/rating_helper/all_ratings.php'));
-
-    $configs = array();
-
-//TODO
-
-    foreach ($configs as $config) {
-        $config->plugin = 'local_rating_helper';
-        $settings->add($config);
-    }
+    $ADMIN->add('localplugins', new admin_externalpage('local_rating_helper', get_string('pluginname', 'local_rating_helper'),
+        $CFG->wwwroot . '/local/rating_helper/courses.php'));
 }

@@ -1,0 +1,163 @@
+<section class="container-fluid section-part">
+    <div class="ratings-title mb-4">
+        <h3 class="title-name">
+            {{ratings}}
+        </h3>
+    </div>
+    <div class="row m-0">
+        <div class="col-md-4 col-12 p-0 ">
+            <div class="left-part">
+
+                <div class="left-upper-part">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span id="avg_rating" class="five">0.0</span>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="star">
+                                <h3 class="star-head" id="avg_ret_star">
+                                    {{ratings}}
+                                </h3>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+
+            <div class="star-of-star">
+                <div class="star">
+                    <h5 class="star-head">
+                        {{{star5}}}
+                        <span class="five-star">| 5 Stars (<span id="five-star"></span>)</span>
+                    </h5>
+
+                </div>
+                <div>
+                    <div class="star">
+                        <h5 class="star-head">
+                            {{{star4}}}
+                            <span class="four-star">| 4 Stars (<span id="four-star"></span>)</span>
+                        </h5>
+
+                    </div>
+                    <div>
+                        <div class="star">
+                            <h5 class="star-head">
+                                <div class="">
+                                    {{{star3}}}
+                                </div>
+                                <span class="three-star">| 3 Stars (<span id="three-star"></span>)</span>
+                            </h5>
+
+                        </div>
+                        <div>
+                            <div class="star">
+                                <h5 class="star-head">
+                                    {{{star2}}}
+                                    <span class="two-star">| 2 Stars (<span id="two-star"></span>)</span>
+                                </h5>
+
+                            </div>
+                            <div>
+                                <div class="star">
+                                    <h5 class="star-head">
+                                        {{{star1}}}
+                                        <span class="one-star">| 1 Stars (<span id="one-star"></span>)</span>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 col-12 p-0">
+            <div class="middle-part">
+                <div class="experience-section">
+                    {{^israting}}
+                        <div id="rating-form">
+                            <h4 class="feedback mb-3">
+                                {{whatyourfeedback}}
+                            </h4>
+                            <p class="experience">
+                                {{rateyourexperience}}
+                            </p>
+                            <form method="post">
+                                <div class="d-flex">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="stars">
+                                                <input class="star star-5" required id="star-5" type="radio"
+                                                       value="5"
+                                                       name="star"/>
+                                                <label class="star star-5" for="star-5"></label>
+                                                <input class="star star-4" required id="star-4" type="radio"
+                                                       value="4"
+                                                       name="star"/>
+                                                <label class="star star-4" for="star-4"></label>
+                                                <input class="star star-3" required id="star-3" type="radio"
+                                                       value="3"
+                                                       name="star"/>
+                                                <label class="star star-3" for="star-3"></label>
+                                                <input class="star star-2" required id="star-2" type="radio"
+                                                       value="2"
+                                                       name="star"/>
+                                                <label class="star star-2" for="star-2"></label>
+                                                <input class="star star-1" required id="star-1" type="radio"
+                                                       value="1"
+                                                       name="star"/>
+                                                <label class="star star-1" for="star-1"></label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="review-section">
+                                    <p class="review">{{leaveareview}}</p>
+                                    <div class="comment-section">
+                                <textarea name="comment" id="comment" class="custom-rounded p-3 w-100 form-control"
+                                          rows="4"
+                                          maxlength="200"
+                                          placeholder="{{commentplaceholder}}"></textarea>
+                                    </div>
+                                    <div class="text-right mt-4 mb-4">
+                                        <button type="button" id="submit_rating_form"
+                                                class="btn btn-block rating-btn btn-outline-info">
+                                            {{sendrate}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                        </div>
+                        <h4 class="pre-rate">{{previousratings}}</h4>
+                        <div id="user-ratings">
+                        </div>
+                    {{/israting}}
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-md-3 col-12">
+            <div class="card custom-rounded w-100" style="width: 18rem;">
+                <div class="custom-rounded-top" style="overflow: hidden; max-height: 200px">
+                    <img class="w-100 custom-rounded-top"
+                         src="{{imageurl}}"
+                         alt="Card image cap">
+                </div>
+                <div class="card-body">
+
+                    <h5 class="eye"><a href="{{courseurl}}">{{coursefullname}}</a></h5>
+
+                    <div class="suffer-from">
+                        <span class="suffer">{{coursesummary}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

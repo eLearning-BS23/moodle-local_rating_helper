@@ -23,10 +23,8 @@
  * @copyright  2021 Brain Station 23 Limited
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-global $CFG;
-
 defined('MOODLE_INTERNAL') || die;
+
 require_once($CFG->libdir . '/externallib.php');
 
 /*
@@ -34,8 +32,7 @@ require_once($CFG->libdir . '/externallib.php');
  * @subpackage rating_helper
  */
 
-class rating_helper_services extends external_api
-{
+class rating_helper_services extends external_api {
     /**
      * @return external_function_parameters
      */
@@ -59,7 +56,7 @@ class rating_helper_services extends external_api
     public static function get_all_ratings($cmid) {
 
         global $DB, $OUTPUT, $CFG, $PAGE;
-        $newArr = [];
+        $newarr = [];
 
         // Parameter validation.
         $params = self::validate_parameters(
@@ -75,26 +72,22 @@ class rating_helper_services extends external_api
         if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
             $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
             $output['success'] = false;
-            $output['ratings'] = $newArr;
+            $output['ratings'] = $newarr;
             return $output;
         }
 
-        $allratingList = 'select lrh.*,lrc.*,u.firstname,u.lastname from {local_rating_helper} as lrh 
-                LEFT JOIN {user} as u ON u.id = lrh.userid 
-                LEFT JOIN {local_rating_comment} as lrc ON lrh.id = lrc.ratingid 
+        $allratinglist = 'select lrh.*,lrc.*,u.firstname,u.lastname from {local_rating_helper} lrh
+                LEFT JOIN {user} u ON u.id = lrh.userid
+                LEFT JOIN {local_rating_comment} lrc ON lrh.id = lrc.ratingid
                 where cmid = ' . $cmid;
-        $allratings = $DB->get_records_sql($allratingList);
-
-
-        if (count($allratings) > 0)
-        {
+        $allratings = $DB->get_records_sql($allratinglist);
+        if (count($allratings) > 0) {
             foreach ($allratings as $data) {
 
-                $pfpic = '';
                 $user = core_user::get_user($data->userid) ?? [];
 
                 $pfpic = $OUTPUT->user_picture($user, array('size' => 100));
-                $outpuArr = [
+                $outpuarr = [
                     'id' => $data->id,
                     'userid' => $data->userid,
                     'cmid' => $data->cmid,
@@ -105,16 +98,15 @@ class rating_helper_services extends external_api
                     'lastname' => $data->lastname,
                     'profilepicture' => strval($pfpic)
                 ];
-                array_push($newArr, $outpuArr);
+                array_push($newarr, $outpuarr);
             }
             $output['result'] = get_string('found', 'local_rating_helper', [$params['cmid']]);;
             $output['success'] = true;
-            $output['ratings'] = $newArr;
-        }
-        else{
+            $output['ratings'] = $newarr;
+        } else {
             $output['result'] = get_string('noretingsfound', 'local_rating_helper');
             $output['success'] = false;
-            $output['ratings'] = $newArr;
+            $output['ratings'] = $newarr;
         }
 
         return $output;
@@ -166,29 +158,29 @@ class rating_helper_services extends external_api
 
         if (!($cm = $DB->get_record('course_modules', array('id' => $params['cmid'])))) {
             $output['result'] = get_string('coursenotfound', 'local_rating_helper', [$params['cmid']]);
-            $output['rated1'] = $ratingList->rating1 ?? 0;
-            $output['rated2'] = $ratingList->rating2 ?? 0;
-            $output['rated3'] = $ratingList->rating3 ?? 0;
-            $output['rated4'] = $ratingList->rating4 ?? 0;
-            $output['rated5'] = $ratingList->rating5 ?? 0;
+            $output['rated1'] = $ratinglist->rating1 ?? 0;
+            $output['rated2'] = $ratinglist->rating2 ?? 0;
+            $output['rated3'] = $ratinglist->rating3 ?? 0;
+            $output['rated4'] = $ratinglist->rating4 ?? 0;
+            $output['rated5'] = $ratinglist->rating5 ?? 0;
             $output['success'] = true;
             return $output;
         }
 
         $sql = 'SELECT
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 1 AND cmid = ' . $cmid .') as rating1,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 2 AND cmid = ' . $cmid .') as rating2,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 3 AND cmid = ' . $cmid .') as rating3,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 4 AND cmid = ' . $cmid .') as rating4,
-            (select COUNT(*) FROM mdl_local_rating_helper where rating = 5  AND cmid = ' . $cmid .') as rating5
-        FROM mdl_local_rating_helper limit 1';
-        $ratingList = $DB->get_record_sql($sql);
+            (select COUNT(*) FROM {local_rating_helper} where rating = 1 AND cmid = ' . $cmid . ') as rating1,
+            (select COUNT(*) FROM {local_rating_helper} where rating = 2 AND cmid = ' . $cmid . ') as rating2,
+            (select COUNT(*) FROM {local_rating_helper} where rating = 3 AND cmid = ' . $cmid . ') as rating3,
+            (select COUNT(*) FROM {local_rating_helper} where rating = 4 AND cmid = ' . $cmid . ') as rating4,
+            (select COUNT(*) FROM {local_rating_helper} where rating = 5  AND cmid = ' . $cmid . ') as rating5
+        FROM {local_rating_helper} limit 1';
+        $ratinglist = $DB->get_record_sql($sql);
 
-        $output['rated1'] = $ratingList->rating1 ?? 0;
-        $output['rated2'] = $ratingList->rating2 ?? 0;
-        $output['rated3'] = $ratingList->rating3 ?? 0;
-        $output['rated4'] = $ratingList->rating4 ?? 0;
-        $output['rated5'] = $ratingList->rating5 ?? 0;
+        $output['rated1'] = $ratinglist->rating1 ?? 0;
+        $output['rated2'] = $ratinglist->rating2 ?? 0;
+        $output['rated3'] = $ratinglist->rating3 ?? 0;
+        $output['rated4'] = $ratinglist->rating4 ?? 0;
+        $output['rated5'] = $ratinglist->rating5 ?? 0;
         $output['result'] = get_string('notfound', 'local_rating_helper', [$params['cmid']]);
         $output['success'] = true;
         return $output;
@@ -213,7 +205,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Parameterdefinition for method "user_has_rated"
+     * Parameter definition for method "user_has_rated"
      *
      * @return {object} external_function_parameters
      */
@@ -238,7 +230,7 @@ class rating_helper_services extends external_api
      * @throws {moodle_exception}
      */
     public static function user_has_rated($userid, $cmid) {
-        global $DB, $CFG, $USER;
+        global $DB, $CFG;
 
         // Parameter validation.
         $params = self::validate_parameters(
@@ -282,7 +274,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Returndefinition for method "user_has_rated"
+     * Return definition for method "user_has_rated"
      *
      * @return external_description
      */
@@ -297,7 +289,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Parameterdefinition for method "save_rating"
+     * Parameter definition for method "save_rating"
      *
      * @return {object} external_function_parameters
      */
@@ -331,7 +323,7 @@ class rating_helper_services extends external_api
      * @throws {moodle_exception}
      */
     public static function save_rating($userid, $cmid, $rating, $comment) {
-        global $DB, $CFG, $USER;
+        global $DB, $CFG;
 
         // Parameter validation.
         $params = self::validate_parameters(
@@ -380,7 +372,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Returndefinition for method "save_rating"
+     * Return definition for method "save_rating"
      *
      * @return external_description
      */
@@ -394,7 +386,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Parameterdefinition for method "get_cm_rating"
+     * Parameter definition for method "get_cm_rating"
      *
      * @return {object} external_function_parameters
      */
@@ -416,7 +408,7 @@ class rating_helper_services extends external_api
      * @throws {moodle_exception}
      */
     public static function get_cm_rating($cmid) {
-        global $DB, $CFG, $USER;
+        global $DB, $CFG;
 
         // Parameter validation.
         $params = self::validate_parameters(
@@ -448,7 +440,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Returndefinition for method "get_cm_rating"
+     * Return definition for method "get_cm_rating"
      *
      * @return external_description
      */
@@ -463,7 +455,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Parameterdefinition for method "get_course_rating"
+     * Parameter definition for method "get_course_rating"
      *
      * @return {object} external_function_parameters
      */
@@ -485,7 +477,7 @@ class rating_helper_services extends external_api
      * @throws {moodle_exception}
      */
     public static function get_course_rating($courseid) {
-        global $DB, $CFG, $USER;
+        global $DB, $CFG;
 
         // Parameter validation.
         $params = self::validate_parameters(
@@ -525,7 +517,7 @@ class rating_helper_services extends external_api
     }
 
     /**
-     * Returndefinition for method "get_course_rating"
+     * Return definition for method "get_course_rating"
      *
      * @return external_description
      */
