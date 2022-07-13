@@ -24,6 +24,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $functions = array(
     'user_has_rated' => array(
         'classname' => 'rating_helper_services',
@@ -80,5 +82,4 @@ $functions = array(
         'ajax' => true,
         'capabilities' => 'local/rating_helper:access',
     ),
-
 );

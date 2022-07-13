@@ -1,0 +1,29 @@
+<table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>User</th>
+                <th>Course Id</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody class="list-unstyled" id="page_list">
+
+            {{#userratings}}
+                <tr>
+                    <td>{{firstname }} {{lastname}}</td>
+                    <td>{{cmid}}</td>
+                    <td>{{rating}}</td>
+                    <td>{{comment}}</td>
+                    <td>{{ratingdate}}</td>
+                </tr>
+            {{/userratings}}
+            {{^userratings}}
+                <tr>
+                    <td colspan="5">No Ratings Found.</td>
+                </tr>
+            {{/userratings}}
+            </tbody>
+        </table>
+

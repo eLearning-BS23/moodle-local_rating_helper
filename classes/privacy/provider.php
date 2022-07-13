@@ -26,8 +26,6 @@
 
 namespace local_rating_helper\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
 use \context;
 use \core_privacy\local\request\approved_contextlist;
 use \core_privacy\local\request\writer;
@@ -65,11 +63,8 @@ class provider implements
             'cmid' => 'privacy:metadata:database:local_rating_helper:cmid',
             'rating' => 'privacy:metadata:database:local_rating_helper:rating',
         ], 'privacy:metadata:database:local_rating_helper');
-
-
         return $collection;
     }
-
     /**
      * Get the list of contexts that contain user information for the specified user.
      *
@@ -107,15 +102,15 @@ class provider implements
         }
 
         $user = $DB->get_record('user', array('id' => $context->instanceid));
-        $has_data = false;
+        $hasdata = false;
 
         // Make the check for each table.
-        if ($DB->records_exists('local_rating_helper', array('userid' => $user->id))) {
-            $has_data = true;
+        if ($DB->record_exists('local_rating_helper', array('userid' => $user->id))) {
+            $hasdata = true;
         }
 
         // If we have data add the user.
-        if ($has_data) {
+        if ($hasdata) {
             $userlist->add_user($user->id);
         }
     }
@@ -141,7 +136,7 @@ class provider implements
                     get_string('userdata', 'local_rating_helper'),
                     $data->id,
                 ];
-                unset($data->id);// Dont export the moodle internal id.
+                unset($data->id);// Don't export the moodle internal id.
                 writer::with_context($context)->export_data($subcontext, $data);
             }
         }

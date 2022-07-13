@@ -1,0 +1,42 @@
+<div class="d-flex  mb-2">
+    <a href="{{ratings}}" class="btn btn-outline-primary pull-right">Ratings</a>
+</div>
+<table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>S/N</th>
+            <th>Course Name</th>
+            <th>Ratings</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#data}}
+            <tr>
+                <td>{{sn}}</td>
+                <td>{{name}}</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-danger"
+                       href="{{submitrating}}">
+                        <i class="fa fa-users"></i>
+                        Rate Now
+                    </a>
+                    <a class="btn btn-sm btn-outline-primary copy_url"
+                       data-url="{{submitrating}}">
+                        <i class="fa fa-copy"></i>
+                        Copy URL
+                    </a>
+                    <a class="btn btn-sm btn-outline-info"
+                       href="{{ratings}}">
+                        <i class="fa fa-gift"></i>
+                        Ratings
+                    </a>
+                </td>
+            </tr>
+        {{/data}}
+        {{^data}}
+            <tr>
+                <td colspan="3">Sorry !!! No Course found.</td>
+            </tr>
+        {{/data}}
+        </tbody>
+    </table>

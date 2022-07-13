@@ -17,8 +17,6 @@
 /**
  * Capabilites for rating_helper
  *
- * Defines one all purpose capability.
- *
  * @package    local
  * @subpackage rating_helper
  * @author     Brain Station 23
@@ -26,11 +24,11 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 $capabilities = array(
     'local/rating_helper:access' => array(
         'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
+        'contextlevel' => CONTEXT_SYSTEM
     ),
 );
-
-

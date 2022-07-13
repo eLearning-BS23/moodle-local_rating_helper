@@ -26,21 +26,22 @@
 
 $string['rating_helper:access'] = 'Use rating helper webservices';
 
-$string['pluginname'] = 'Modules rating helper';
+$string['pluginname'] = 'Rating helper';
 $string['ratings'] = 'Ratings';
+$string['courses'] = 'Courses';
 $string['noratingfound'] = 'No Ratings Found';
 $string['previousratings'] = 'Previous Ratings';
 $string['whatyourfeedback'] = 'What your feedback';
 $string['rateyourexperience'] = 'Rate Your Experience (required)';
 $string['leaveareview'] = 'Leave a review';
-$string['sendrate'] = 'Send Rate';
+$string['sendrate'] = 'Submit';
 $string['commentplaceholder'] = 'Type your comment here';
 $string['basedon'] = 'Based On';
-$string['ratingfailed'] = 'rating field is required';
+$string['ratingfailed'] = 'Rating is required';
 $string['coursenotfound'] = 'Course module not found for id "{$a}"?';
 $string['usernotfound'] = 'User not found for id  "{$a}"?';
 $string['notfound'] = 'Data Not Found';
-$string['ratingsaved'] = 'Rating Submited';
+$string['ratingsaved'] = 'Rating has been Submitted';
 $string['submit'] = 'Show';
 $string['choserating'] = 'Chose Rating';
 $string['choseuser'] = 'Chose User';
